@@ -1,8 +1,9 @@
-package com.sams3p10l.diplomski
+package com.sams3p10l.diplomski.ui
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.sams3p10l.diplomski.R
 
 class MainActivity : AppCompatActivity() {
     companion object {
