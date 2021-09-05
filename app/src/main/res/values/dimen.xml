@@ -8,4 +8,7 @@
 
     <!-- The recommended margin for the left column of the two-column card. -->
     <dimen name="glass_card_two_column_margin">30dp</dimen>
+
+    <dimen name="tab_indicator_margin">4dp</dimen>
+    <dimen name="auto">0dp</dimen>
 </resources>
