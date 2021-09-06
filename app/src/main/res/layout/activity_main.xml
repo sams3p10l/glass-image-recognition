@@ -8,6 +8,7 @@
     android:orientation="horizontal">
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabGravity="center"
