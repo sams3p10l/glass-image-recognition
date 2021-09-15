@@ -55,4 +55,7 @@ dependencies {
     // Dagger-Hilt
     implementation "com.google.dagger:hilt-android:2.38.1"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
+
+    // ML Kit
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:17.0.0'
 }
