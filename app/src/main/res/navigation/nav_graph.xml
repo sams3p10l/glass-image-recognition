@@ -7,5 +7,27 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.sams3p10l.diplomski.ui.fragment.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_actionFragment"
+            app:destination="@id/actionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/actionFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.ActionFragment"
+        android:label="ActionFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.HelpFragment"
+        android:label="HelpFragment" />
 </navigation>
