@@ -5,9 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
-import com.sams3p10l.diplomski.ui.fragment.ActionFragment
-import com.sams3p10l.diplomski.ui.fragment.HelpFragment
-import com.sams3p10l.diplomski.ui.fragment.SettingsFragment
+import com.sams3p10l.diplomski.ui.fragment.HomeFragment
 import com.sams3p10l.diplomski.util.FragmentFactoryUtil
 
 class MainActivity : BaseActivity() {
@@ -34,9 +32,9 @@ class MainActivity : BaseActivity() {
 
     private fun populateFragmentList() {
         fragments.apply {
-            add(FragmentFactoryUtil.create(ActionFragment.TAG, "Action", "Test"))
-            add(FragmentFactoryUtil.create(SettingsFragment.TAG, "Settings", "Test"))
-            add(FragmentFactoryUtil.create(HelpFragment.TAG, "Action", "Test"))
+            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Action", "Test"))
+            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Settings", "Test"))
+            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Help", "Test"))
         }
     }
 

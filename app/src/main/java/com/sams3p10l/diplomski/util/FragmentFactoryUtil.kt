@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.sams3p10l.diplomski.ui.fragment.ActionFragment
 import com.sams3p10l.diplomski.ui.fragment.HelpFragment
+import com.sams3p10l.diplomski.ui.fragment.HomeFragment
 import com.sams3p10l.diplomski.ui.fragment.SettingsFragment
 import com.sams3p10l.diplomski.util.Constants.FOOTER_KEY
 import com.sams3p10l.diplomski.util.Constants.TEXT_KEY
@@ -14,6 +15,7 @@ object FragmentFactoryUtil {
             ActionFragment.TAG -> ActionFragment()
             HelpFragment.TAG -> HelpFragment()
             SettingsFragment.TAG -> SettingsFragment()
+            HomeFragment.TAG -> HomeFragment()
             else -> Fragment()
         }
 
