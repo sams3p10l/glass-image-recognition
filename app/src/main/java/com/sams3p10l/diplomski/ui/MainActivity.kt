@@ -6,12 +6,22 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
 import com.sams3p10l.diplomski.ui.fragment.HomeFragment
-import com.sams3p10l.diplomski.util.FragmentFactoryUtil
+import com.sams3p10l.diplomski.util.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     companion object {
         val TAG: String = MainActivity::class.java.simpleName
     }
+
+    @Inject
+    lateinit var actionLayoutFragment: HomeFragment
+    @Inject
+    lateinit var settingsLayoutFragment: HomeFragment
+    @Inject
+    lateinit var helpLayoutFragment: HomeFragment
 
     private lateinit var binding: ActivityMainBinding
     private val fragments = arrayListOf<Fragment>()
@@ -32,9 +42,24 @@ class MainActivity : BaseActivity() {
 
     private fun populateFragmentList() {
         fragments.apply {
-            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Action", "Test"))
-            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Settings", "Test"))
-            add(FragmentFactoryUtil.create(HomeFragment.TAG, "Help", "Test"))
+            add(actionLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.TEXT_KEY, "Action")
+                    putString(Constants.FOOTER_KEY, "Test")
+                }
+            })
+            add(settingsLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.TEXT_KEY, "Settings")
+                    putString(Constants.FOOTER_KEY, "Test")
+                }
+            })
+            add(helpLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.TEXT_KEY, "Help")
+                    putString(Constants.FOOTER_KEY, "Test")
+                }
+            })
         }
     }
 
