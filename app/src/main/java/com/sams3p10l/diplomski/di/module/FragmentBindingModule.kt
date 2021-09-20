@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import javax.inject.Singleton
+import dagger.hilt.android.scopes.ActivityScoped
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -17,15 +17,15 @@ object FragmentBindingModule {
     @Provides
     fun provideHomeFragment() = HomeFragment()
 
-    @Singleton
+    @ActivityScoped
     @Provides
     fun provideActionFragment() = ActionFragment()
 
-    @Singleton
+    @ActivityScoped
     @Provides
     fun provideSettingsFragment() = SettingsFragment()
 
-    @Singleton
+    @ActivityScoped
     @Provides
     fun provideHelpFragment() = HelpFragment()
 }
