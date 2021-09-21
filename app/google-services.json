@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "609758712260",
+    "project_id": "diplomski-29ef6",
+    "storage_bucket": "diplomski-29ef6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609758712260:android:e03539123910827f5a9491",
+        "android_client_info": {
+          "package_name": "com.sams3p10l.diplomski"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609758712260-uuad8r9u53q9mndhceb45vt79j3p0ntk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhvadvXbHhO1vkTioKLZX4IRL_bY0lsZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609758712260-uuad8r9u53q9mndhceb45vt79j3p0ntk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
