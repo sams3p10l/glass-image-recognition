@@ -1,10 +1,13 @@
 package com.sams3p10l.diplomski.ui
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
+import com.sams3p10l.diplomski.ui.fragment.ActionFragment
 import com.sams3p10l.diplomski.ui.fragment.HomeFragment
 import com.sams3p10l.diplomski.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +41,7 @@ class MainActivity : BaseActivity() {
         screenSlidePagerAdapter.notifyDataSetChanged()
 
         binding.tabLayout.setupWithViewPager(binding.viewpager, true)
+        dispatchRequestPermissionContract.launch(android.Manifest.permission.CAMERA)
     }
 
     private fun populateFragmentList() {
@@ -62,6 +66,15 @@ class MainActivity : BaseActivity() {
             })
         }
     }
+
+    private val dispatchRequestPermissionContract =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+
+            } else {
+                Log.w(ActionFragment.TAG, "Permission denied")
+            }
+        }
 
     inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm) {
