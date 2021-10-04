@@ -1,6 +1,8 @@
 package com.sams3p10l.diplomski.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import com.sams3p10l.diplomski.ui.fragment.ActionFragment
 import com.sams3p10l.diplomski.ui.fragment.HomeFragment
 import com.sams3p10l.diplomski.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,40 +44,30 @@ class MainActivity : BaseActivity() {
         screenSlidePagerAdapter.notifyDataSetChanged()
 
         binding.tabLayout.setupWithViewPager(binding.viewpager, true)
-        dispatchRequestPermissionContract.launch(android.Manifest.permission.CAMERA)
     }
 
     private fun populateFragmentList() {
         fragments.apply {
             add(actionLayoutFragment.also {
                 it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Action")
+                    putString(Constants.TEXT_KEY, Constants.ACTION_FRAGMENT_TITLE)
                     putString(Constants.FOOTER_KEY, "Test")
                 }
             })
             add(settingsLayoutFragment.also {
                 it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Settings")
+                    putString(Constants.TEXT_KEY, Constants.SETTINGS_FRAGMENT_TITLE)
                     putString(Constants.FOOTER_KEY, "Test")
                 }
             })
             add(helpLayoutFragment.also {
                 it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Help")
+                    putString(Constants.TEXT_KEY, Constants.HELP_FRAGMENT_TITLE)
                     putString(Constants.FOOTER_KEY, "Test")
                 }
             })
         }
     }
-
-    private val dispatchRequestPermissionContract =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-
-            } else {
-                Log.w(ActionFragment.TAG, "Permission denied")
-            }
-        }
 
     inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm) {

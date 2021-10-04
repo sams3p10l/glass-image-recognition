@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,11 @@ import androidx.fragment.app.Fragment
 import com.sams3p10l.diplomski.databinding.FragmentActionBinding
 import com.sams3p10l.diplomski.processing.TextProcessor
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ActionFragment : Fragment() {
+class ActionFragment : Fragment(), TextToSpeech.OnInitListener {
     companion object {
         val TAG = ActionFragment::class.java.name
         private const val REQUEST_IMAGE_CAPTURE = 1
@@ -32,9 +34,11 @@ class ActionFragment : Fragment() {
     private val binding: FragmentActionBinding
         get() = _binding!!
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        dispatchTakePictureIntent.launch(null)
+    private var ttsEngine: TextToSpeech? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dispatchCheckTtsContract.launch(Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA))
     }
 
     override fun onCreateView(
@@ -53,6 +57,26 @@ class ActionFragment : Fragment() {
 
     private val dispatchTakePictureIntent =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-            processor.processImage(bitmap)
+            processor.processImage(bitmap, ttsEngine)
         }
+
+    private val dispatchCheckTtsContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                ttsEngine = TextToSpeech(requireContext(), this)
+            } else {
+                Intent(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA).also { intent ->
+                    startActivity(intent)
+                }
+            }
+        }
+
+    override fun onInit(p0: Int) {
+        if (p0 != TextToSpeech.ERROR) {
+            Log.d(TAG, "onInit: TTS")
+            ttsEngine?.language = Locale.getDefault()
+            dispatchTakePictureIntent.launch(null)
+        }
+    }
+
 }
