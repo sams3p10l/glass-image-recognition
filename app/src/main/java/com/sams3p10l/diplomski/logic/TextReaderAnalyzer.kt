@@ -22,6 +22,8 @@ class TextReaderAnalyzer @Inject constructor(
         val TAG = TextReaderAnalyzer::class.java.name
     }
 
+    private var latestProcessedBlock = ""
+
     override fun analyze(imageProxy: ImageProxy) {
         imageProxy.image?.let {
             process(it, imageProxy)
@@ -30,7 +32,7 @@ class TextReaderAnalyzer @Inject constructor(
 
     private fun process(image: Image, imageProxy: ImageProxy) {
         try {
-            readTextFromImage(InputImage.fromMediaImage(image, 90), imageProxy)
+            readTextFromImage(InputImage.fromMediaImage(image, 0), imageProxy)
         } catch (e: IOException) {
             Log.w(TAG, "Failed to load the image", e)
         }
@@ -50,12 +52,15 @@ class TextReaderAnalyzer @Inject constructor(
     }
 
     private fun processTextFromImage(visionText: Text) {
-        for (block in visionText.textBlocks) {
-            //optimize
-            for (line in block.lines) {
+        val mutableBlocks = visionText.textBlocks.toMutableList()
 
-                for (element in line.elements) {
-                    textFoundListener(element.text)
+        if (mutableBlocks.isNotEmpty()) {
+            mutableBlocks.sortByDescending {
+                it.text.length
+            }.also {
+                if (latestProcessedBlock != mutableBlocks[0].text) {
+                    latestProcessedBlock = mutableBlocks[0].text
+                    textFoundListener(latestProcessedBlock)
                 }
             }
         }
