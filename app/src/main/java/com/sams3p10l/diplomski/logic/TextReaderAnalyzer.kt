@@ -8,9 +8,8 @@ import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
-import com.google.mlkit.vision.text.TextRecognizerOptionsInterface
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import org.apache.commons.text.similarity.CosineSimilarity
 import java.io.IOException
 import javax.inject.Inject
 
@@ -20,9 +19,11 @@ class TextReaderAnalyzer @Inject constructor(
 ) : ImageAnalysis.Analyzer {
     companion object {
         val TAG = TextReaderAnalyzer::class.java.name
+        const val SIMILARITY_SCORE = 0.2
     }
 
-    private var latestProcessedBlock = ""
+    private var latestProcessedHistogram = hashMapOf<CharSequence, Int>()
+    private val similarity: CosineSimilarity by lazy { CosineSimilarity() }
 
     override fun analyze(imageProxy: ImageProxy) {
         imageProxy.image?.let {
@@ -57,11 +58,27 @@ class TextReaderAnalyzer @Inject constructor(
         if (mutableBlocks.isNotEmpty()) {
             mutableBlocks.sortByDescending {
                 it.text.length
-            }.also {
-                if (latestProcessedBlock != mutableBlocks[0].text) {
-                    latestProcessedBlock = mutableBlocks[0].text
-                    textFoundListener(latestProcessedBlock)
+            }
+
+            val biggestBlock = mutableBlocks[0]
+            val blockHistogram = hashMapOf<CharSequence, Int>()
+            biggestBlock.lines.forEach { line ->
+                line.elements.forEach {
+                    val word = it.text
+                    if (!blockHistogram.containsKey(word)) {
+                        blockHistogram[word] = 1
+                    } else {
+                        blockHistogram[word] = blockHistogram[word]?.plus(1) as Int
+                    }
                 }
+            }
+
+            val similarity = similarity.cosineSimilarity(blockHistogram, latestProcessedHistogram)
+            Log.d(TAG, "Similarity is $similarity")
+
+            if (similarity < SIMILARITY_SCORE) {
+                latestProcessedHistogram = blockHistogram
+                textFoundListener(biggestBlock.text)
             }
         }
     }
