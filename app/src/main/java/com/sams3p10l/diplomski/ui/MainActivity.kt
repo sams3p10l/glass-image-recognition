@@ -1,10 +1,15 @@
 package com.sams3p10l.diplomski.ui
 
 import android.os.Bundle
+import androidx.camera.core.ExperimentalGetImage
+import androidx.core.util.rangeTo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
+import com.sams3p10l.diplomski.gesture.GlassGestureDetector
+import com.sams3p10l.diplomski.ui.fragment.ActionFragment
+import com.sams3p10l.diplomski.ui.fragment.BaseFragment
 import com.sams3p10l.diplomski.ui.fragment.HomeFragment
 import com.sams3p10l.diplomski.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +65,22 @@ class MainActivity : BaseActivity() {
                     putString(Constants.FOOTER_KEY, "Test")
                 }
             })
+        }
+    }
+
+    @ExperimentalGetImage
+    override fun onGesture(gesture: GlassGestureDetector.Gesture?): Boolean {
+        return when (gesture) {
+            GlassGestureDetector.Gesture.TAP -> {
+                val currentFragment = supportFragmentManager.fragments.last()
+                if (currentFragment is BaseFragment) {
+                    currentFragment.onSingleTap()
+                    true
+                } else {
+                    super.onGesture(gesture)
+                }
+            }
+            else -> super.onGesture(gesture)
         }
     }
 

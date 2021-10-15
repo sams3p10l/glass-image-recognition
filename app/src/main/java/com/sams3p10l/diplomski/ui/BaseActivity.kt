@@ -40,7 +40,7 @@ abstract class BaseActivity : AppCompatActivity(), GlassGestureDetector.OnGestur
     override fun onGesture(gesture: GlassGestureDetector.Gesture?): Boolean {
         return when (gesture) {
             GlassGestureDetector.Gesture.SWIPE_DOWN -> {
-                finish()
+                onBackPressed()
                 true
             }
             else -> false

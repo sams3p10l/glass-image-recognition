@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.camera.core.ExperimentalGetImage
 import androidx.fragment.app.Fragment
 import com.sams3p10l.diplomski.databinding.FragmentHomeBinding
+import com.sams3p10l.diplomski.gesture.OnSingleTapListener
 import com.sams3p10l.diplomski.util.Constants.FOOTER_KEY
 import com.sams3p10l.diplomski.util.Constants.TEXT_KEY
 
 
 @ExperimentalGetImage
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     companion object {
         val TAG: String = HomeFragment::class.java.name
     }
@@ -33,14 +34,10 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.root.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(it.id, ActionFragment(), ActionFragment.TAG)
-                ?.addToBackStack(null)
-                ?.commit()
-        }
+    override fun onSingleTap() {
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(binding.root.id, ActionFragment(), ActionFragment.TAG)
+            ?.addToBackStack(null)
+            ?.commit()
     }
 }
