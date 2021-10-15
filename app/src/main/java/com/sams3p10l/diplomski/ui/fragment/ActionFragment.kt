@@ -117,7 +117,7 @@ class ActionFragment : BaseFragment(), TextToSpeech.OnInitListener {
 
     private fun onTextFound(foundText: String) {
         Log.d(TAG, "onTextFound: $foundText")
-        blockStack.add(foundText)
+        blockStack.addFirst(foundText)
     }
 
     private fun startCamera() {
@@ -167,7 +167,10 @@ class ActionFragment : BaseFragment(), TextToSpeech.OnInitListener {
 
     override fun onSingleTap() {
         try {
-            ttsEngine?.speak(blockStack.first(), TextToSpeech.QUEUE_ADD, null, null)
+            val toSpeech = blockStack.first()
+            ttsEngine?.speak(toSpeech, TextToSpeech.QUEUE_ADD, null, null)
+            blockStack.removeFirst()
+            //blockStack.forEach { Log.d(TAG, it) }
         } catch (e: NoSuchElementException) {
             Log.w(TAG, "onGesture: ", e)
         }
