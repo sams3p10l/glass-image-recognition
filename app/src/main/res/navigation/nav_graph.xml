@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/actionFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.ActionFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.functional.ActionFragment"
         android:label="ActionFragment" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.SettingsFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.functional.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.HelpFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.functional.HelpFragment"
         android:label="HelpFragment" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.HomeFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.tabs.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_actionFragment"

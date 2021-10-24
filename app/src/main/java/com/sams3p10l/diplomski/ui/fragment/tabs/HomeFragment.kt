@@ -1,33 +1,35 @@
-package com.sams3p10l.diplomski.ui.fragment
+package com.sams3p10l.diplomski.ui.fragment.tabs
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.FragmentHomeBinding
-import com.sams3p10l.diplomski.gesture.GlassGestureDetector
-import com.sams3p10l.diplomski.gesture.OnSingleTapListener
+import com.sams3p10l.diplomski.ui.fragment.functional.ActionFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.BaseFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.HelpFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.SettingsFragment
 import com.sams3p10l.diplomski.util.Constants
+import com.sams3p10l.diplomski.util.ScreenSlidePagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment: BaseFragment() {
+class HomeFragment : BaseFragment() {
     companion object {
         val TAG: String = HomeFragment::class.java.name
     }
 
     @Inject
-    lateinit var actionLayoutFragment: TabLayoutFragment
+    lateinit var tabAction: TabLayoutFragment
+
     @Inject
-    lateinit var settingsLayoutFragment: TabLayoutFragment
+    lateinit var tabSettings: TabLayoutFragment
+
     @Inject
-    lateinit var helpLayoutFragment: TabLayoutFragment
+    lateinit var tabHelp: TabLayoutFragment
 
     private val fragments = arrayListOf<TabLayoutFragment>()
 
@@ -38,7 +40,8 @@ class HomeFragment: BaseFragment() {
 
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
-        val screenSlidePagerAdapter = ScreenSlidePagerAdapter(requireActivity().supportFragmentManager)
+        val screenSlidePagerAdapter =
+            ScreenSlidePagerAdapter(requireActivity().supportFragmentManager, fragments)
         binding.viewpager.adapter = screenSlidePagerAdapter
 
         populateFragmentList()
@@ -57,39 +60,27 @@ class HomeFragment: BaseFragment() {
 
     private fun populateFragmentList() {
         fragments.apply {
-            add(actionLayoutFragment.also {
+            add(tabAction.also {
                 it.arguments = Bundle().apply {
                     putString(Constants.FRAGMENT_KEY, ActionFragment.TAG)
                     putString(Constants.TEXT_KEY, getString(R.string.title_action))
                     putString(Constants.FOOTER_KEY, getString(R.string.subtitle_action))
                 }
             })
-            add(settingsLayoutFragment.also {
+            add(tabSettings.also {
                 it.arguments = Bundle().apply {
                     putString(Constants.FRAGMENT_KEY, SettingsFragment.TAG)
                     putString(Constants.TEXT_KEY, getString(R.string.title_settings))
                     putString(Constants.FOOTER_KEY, getString(R.string.subtitle_settings))
                 }
             })
-            add(helpLayoutFragment.also {
+            add(tabHelp.also {
                 it.arguments = Bundle().apply {
                     putString(Constants.FRAGMENT_KEY, HelpFragment.TAG)
                     putString(Constants.TEXT_KEY, getString(R.string.title_help))
                     putString(Constants.FOOTER_KEY, getString(R.string.subtitle_help))
                 }
             })
-        }
-    }
-
-    inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
-        FragmentStatePagerAdapter(fm) {
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-
-        override fun getItem(position: Int): TabLayoutFragment {
-            return fragments[position]
         }
     }
 

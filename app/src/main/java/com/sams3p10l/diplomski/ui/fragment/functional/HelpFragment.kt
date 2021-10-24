@@ -1,10 +1,9 @@
-package com.sams3p10l.diplomski.ui.fragment
+package com.sams3p10l.diplomski.ui.fragment.functional
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.sams3p10l.diplomski.databinding.FragmentHelpBinding
 
 class HelpFragment : BaseFragment() {
@@ -24,7 +23,7 @@ class HelpFragment : BaseFragment() {
     }
 
     override fun onSingleTap() {
-        TODO("Not yet implemented")
+
     }
 
 }

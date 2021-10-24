@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
 import com.sams3p10l.diplomski.gesture.GlassGestureDetector
 import com.sams3p10l.diplomski.ui.fragment.*
-import com.sams3p10l.diplomski.util.Constants
+import com.sams3p10l.diplomski.ui.fragment.functional.BaseFragment
 import com.sams3p10l.diplomski.util.currentNavigationFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), GlassGestureDetector.OnGestureListener {

@@ -1,4 +1,4 @@
-package com.sams3p10l.diplomski.ui.fragment
+package com.sams3p10l.diplomski.ui.fragment.functional
 
 import android.Manifest
 import android.content.Context
@@ -17,12 +17,10 @@ import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.FragmentActionBinding
-import com.sams3p10l.diplomski.gesture.GlassGestureDetector
-import com.sams3p10l.diplomski.gesture.OnSingleTapListener
 import com.sams3p10l.diplomski.logic.TextReaderAnalyzer
-import kotlinx.coroutines.coroutineScope
+import com.sams3p10l.diplomski.util.Constants
 import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -159,8 +157,11 @@ class ActionFragment : BaseFragment(), TextToSpeech.OnInitListener {
 
     override fun onInit(p0: Int) {
         if (p0 != TextToSpeech.ERROR) {
-            Log.d(TAG, "onInit: TTS")
-            ttsEngine?.language = Locale.getDefault()
+            val languageTag = activity?.getPreferences(Context.MODE_PRIVATE)
+                ?.getString(Constants.PREF_LANGUAGE_KEY, getString(R.string.locale_english))
+            ttsEngine?.language =
+                Locale.forLanguageTag(languageTag ?: getString(R.string.locale_english))
+
             startCameraOrRequestPermissions()
         }
     }
@@ -168,9 +169,9 @@ class ActionFragment : BaseFragment(), TextToSpeech.OnInitListener {
     override fun onSingleTap() {
         try {
             val toSpeech = blockStack.first()
+            Log.d(TAG, "onSingleTap: $toSpeech")
             ttsEngine?.speak(toSpeech, TextToSpeech.QUEUE_ADD, null, null)
             blockStack.removeFirst()
-            //blockStack.forEach { Log.d(TAG, it) }
         } catch (e: NoSuchElementException) {
             Log.w(TAG, "onGesture: ", e)
         }

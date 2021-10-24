@@ -1,15 +1,17 @@
-package com.sams3p10l.diplomski.ui.fragment
+package com.sams3p10l.diplomski.ui.fragment.tabs
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.ExperimentalGetImage
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.FragmentBaseLayoutBinding
-import com.sams3p10l.diplomski.gesture.OnSingleTapListener
+import com.sams3p10l.diplomski.ui.fragment.functional.ActionFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.BaseFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.HelpFragment
+import com.sams3p10l.diplomski.ui.fragment.functional.SettingsFragment
 import com.sams3p10l.diplomski.util.Constants.FOOTER_KEY
 import com.sams3p10l.diplomski.util.Constants.FRAGMENT_KEY
 import com.sams3p10l.diplomski.util.Constants.TEXT_KEY
@@ -43,11 +45,13 @@ class TabLayoutFragment : BaseFragment() {
         val destination = when (fragmentKey) {
             ActionFragment.TAG -> R.id.action_homeFragment_to_actionFragment
             SettingsFragment.TAG -> R.id.action_homeFragment_to_settingsFragment
-            SettingsFragment.TAG -> R.id.action_homeFragment_to_helpFragment
-            else -> R.id.action_homeFragment_to_helpFragment
+            HelpFragment.TAG -> R.id.action_homeFragment_to_helpFragment
+            else -> null
         }
 
-        findNavController().navigate(destination)
+        destination?.let {
+            findNavController().navigate(it)
+        }
     }
 
 }
