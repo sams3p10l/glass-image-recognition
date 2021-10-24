@@ -5,6 +5,18 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
+        android:id="@+id/actionFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.ActionFragment"
+        android:label="ActionFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.sams3p10l.diplomski.ui.fragment.HelpFragment"
+        android:label="HelpFragment" />
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.sams3p10l.diplomski.ui.fragment.HomeFragment"
         android:label="HomeFragment" >
@@ -18,16 +30,4 @@
             android:id="@+id/action_homeFragment_to_helpFragment"
             app:destination="@id/helpFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/actionFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.ActionFragment"
-        android:label="ActionFragment" />
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.SettingsFragment"
-        android:label="SettingsFragment" />
-    <fragment
-        android:id="@+id/helpFragment"
-        android:name="com.sams3p10l.diplomski.ui.fragment.HelpFragment"
-        android:label="HelpFragment" />
 </navigation>

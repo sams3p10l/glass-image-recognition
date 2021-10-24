@@ -1,43 +1,100 @@
 package com.sams3p10l.diplomski.ui.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.ExperimentalGetImage
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.FragmentHomeBinding
+import com.sams3p10l.diplomski.gesture.GlassGestureDetector
 import com.sams3p10l.diplomski.gesture.OnSingleTapListener
-import com.sams3p10l.diplomski.util.Constants.FOOTER_KEY
-import com.sams3p10l.diplomski.util.Constants.TEXT_KEY
+import com.sams3p10l.diplomski.util.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-@ExperimentalGetImage
-class HomeFragment : BaseFragment() {
+@AndroidEntryPoint
+class HomeFragment: BaseFragment() {
     companion object {
         val TAG: String = HomeFragment::class.java.name
     }
 
+    @Inject
+    lateinit var actionLayoutFragment: TabLayoutFragment
+    @Inject
+    lateinit var settingsLayoutFragment: TabLayoutFragment
+    @Inject
+    lateinit var helpLayoutFragment: TabLayoutFragment
+
+    private val fragments = arrayListOf<TabLayoutFragment>()
+
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var function: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = FragmentHomeBinding.inflate(layoutInflater)
+
+        val screenSlidePagerAdapter = ScreenSlidePagerAdapter(requireActivity().supportFragmentManager)
+        binding.viewpager.adapter = screenSlidePagerAdapter
+
+        populateFragmentList()
+        screenSlidePagerAdapter.notifyDataSetChanged()
+
+        binding.tabLayout.setupWithViewPager(binding.viewpager, true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater)
-
-        function = arguments?.getString(TEXT_KEY).orEmpty().also { binding.hfTitle.text = it }
-        binding.hfFooter.text = arguments?.getString(FOOTER_KEY).orEmpty()
-
         return binding.root
     }
 
+    private fun populateFragmentList() {
+        fragments.apply {
+            add(actionLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.FRAGMENT_KEY, ActionFragment.TAG)
+                    putString(Constants.TEXT_KEY, getString(R.string.title_action))
+                    putString(Constants.FOOTER_KEY, getString(R.string.subtitle_action))
+                }
+            })
+            add(settingsLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.FRAGMENT_KEY, SettingsFragment.TAG)
+                    putString(Constants.TEXT_KEY, getString(R.string.title_settings))
+                    putString(Constants.FOOTER_KEY, getString(R.string.subtitle_settings))
+                }
+            })
+            add(helpLayoutFragment.also {
+                it.arguments = Bundle().apply {
+                    putString(Constants.FRAGMENT_KEY, HelpFragment.TAG)
+                    putString(Constants.TEXT_KEY, getString(R.string.title_help))
+                    putString(Constants.FOOTER_KEY, getString(R.string.subtitle_help))
+                }
+            })
+        }
+    }
+
+    inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
+        FragmentStatePagerAdapter(fm) {
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
+
+        override fun getItem(position: Int): TabLayoutFragment {
+            return fragments[position]
+        }
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
     override fun onSingleTap() {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(binding.root.id, ActionFragment(), ActionFragment.TAG)
-            ?.addToBackStack(null)
-            ?.commit()
+        fragments[binding.viewpager.currentItem].onSingleTap()
     }
 }

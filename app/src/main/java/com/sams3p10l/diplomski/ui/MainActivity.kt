@@ -1,98 +1,92 @@
 package com.sams3p10l.diplomski.ui
 
 import android.os.Bundle
-import androidx.camera.core.ExperimentalGetImage
-import androidx.core.util.rangeTo
-import androidx.fragment.app.Fragment
+import android.view.MotionEvent
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.sams3p10l.diplomski.R
 import com.sams3p10l.diplomski.databinding.ActivityMainBinding
 import com.sams3p10l.diplomski.gesture.GlassGestureDetector
-import com.sams3p10l.diplomski.ui.fragment.ActionFragment
-import com.sams3p10l.diplomski.ui.fragment.BaseFragment
-import com.sams3p10l.diplomski.ui.fragment.HomeFragment
+import com.sams3p10l.diplomski.ui.fragment.*
 import com.sams3p10l.diplomski.util.Constants
+import com.sams3p10l.diplomski.util.currentNavigationFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity(), GlassGestureDetector.OnGestureListener {
     companion object {
         val TAG: String = MainActivity::class.java.simpleName
     }
 
-    @Inject
-    lateinit var actionLayoutFragment: HomeFragment
-    @Inject
-    lateinit var settingsLayoutFragment: HomeFragment
-    @Inject
-    lateinit var helpLayoutFragment: HomeFragment
+    private lateinit var decorView: View
+    private lateinit var glassGestureDetector: GlassGestureDetector
 
     private lateinit var binding: ActivityMainBinding
-    private val fragments = arrayListOf<Fragment>()
+
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val screenSlidePagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
-        binding.viewpager.adapter = screenSlidePagerAdapter
+        navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        navController.setGraph(R.navigation.nav_graph)
 
-        populateFragmentList()
-        screenSlidePagerAdapter.notifyDataSetChanged()
+        supportActionBar?.hide()
 
-        binding.tabLayout.setupWithViewPager(binding.viewpager, true)
-    }
-
-    private fun populateFragmentList() {
-        fragments.apply {
-            add(actionLayoutFragment.also {
-                it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Action")
-                    putString(Constants.FOOTER_KEY, "Test")
-                }
-            })
-            add(settingsLayoutFragment.also {
-                it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Settings")
-                    putString(Constants.FOOTER_KEY, "Test")
-                }
-            })
-            add(helpLayoutFragment.also {
-                it.arguments = Bundle().apply {
-                    putString(Constants.TEXT_KEY, "Help")
-                    putString(Constants.FOOTER_KEY, "Test")
-                }
-            })
+        decorView = window.decorView
+        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                hideSystemUI()
+            }
         }
+
+        glassGestureDetector = GlassGestureDetector(this, this)
     }
 
-    @ExperimentalGetImage
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (glassGestureDetector.onTouchEvent(ev)) {
+            return true
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     override fun onGesture(gesture: GlassGestureDetector.Gesture?): Boolean {
         return when (gesture) {
             GlassGestureDetector.Gesture.TAP -> {
-                val currentFragment = supportFragmentManager.fragments.last()
-                if (currentFragment is BaseFragment) {
-                    currentFragment.onSingleTap()
-                    true
-                } else {
-                    super.onGesture(gesture)
-                }
+                val currentFragment = supportFragmentManager.currentNavigationFragment as BaseFragment
+                currentFragment.onSingleTap()
+                true
             }
-            else -> super.onGesture(gesture)
+            GlassGestureDetector.Gesture.SWIPE_DOWN -> {
+                onBackPressed()
+                true
+            }
+            else -> false
         }
     }
 
-    inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
-        FragmentStatePagerAdapter(fm) {
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
+    private fun hideSystemUI() {
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
+
 }

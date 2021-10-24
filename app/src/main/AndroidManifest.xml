@@ -30,6 +30,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.fragment.ContainerActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"/>
+
     </application>
 
 </manifest>

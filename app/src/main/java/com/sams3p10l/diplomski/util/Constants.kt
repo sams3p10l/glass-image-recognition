@@ -5,4 +5,5 @@ object Constants {
     const val FOOTER_KEY = "footer_key"
     const val TIMESTAMP_KEY = "timestamp_key"
     const val BODY_TEXT_SIZE: Int = 40
+    const val FRAGMENT_KEY = "fragment_key"
 }

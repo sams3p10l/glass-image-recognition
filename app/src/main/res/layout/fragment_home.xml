@@ -1,43 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout"
+    style="@style/Theme.Diplomski.Menu"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/body_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginVertical="@dimen/glass_card_margin"
-        app:layout_constraintBottom_toTopOf="@id/hf_footer"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/auto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Put your widgets inside this FrameLayout. -->
-
-        <TextView
-            android:id="@+id/hf_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="48sp"
-            android:layout_gravity="center"
-            />
-
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/hf_footer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/glass_card_footer_margin"
-        android:layout_marginBottom="@dimen/glass_card_margin"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tab_layout"
+        />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="@dimen/auto"
+        app:tabBackground="@drawable/tab_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

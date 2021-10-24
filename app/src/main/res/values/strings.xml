@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Diplomski</string>
+    <string name="app_name">TTS Lens</string>
+    <string name="title_action">Start Lens</string>
+    <string name="subtitle_action">I used to be an adventurer like you</string>
+    <string name="title_settings">Settings</string>
+    <string name="subtitle_settings">But then I took an arrow</string>
+    <string name="title_help">Help</string>
+    <string name="subtitle_help">In the knee</string>
+    <string name="help_content">Welcome to TTS Lens!\n\nThis app goal is to help visually impaired people.\nApp will recognize text wherever you and read it to you.\n\nTap \'Open Lens\' screen to begin. After text enters your sight, app will try to recognize it. Tap the touchpad once to hear last recognized text in your ear.App is maintaining a history of recognized texts, so if you don\'t have any text in sight, you can tap again up to 10 times to hear previously recognized sentences.\n\nSettings screen gives you an option to choose the language of audio that\'s been generated. Currently supported options are English and Serbian.</string>
 </resources>
