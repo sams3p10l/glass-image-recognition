@@ -19,7 +19,8 @@ class TextReaderAnalyzer @Inject constructor(
 ) : ImageAnalysis.Analyzer {
     companion object {
         val TAG = TextReaderAnalyzer::class.java.name
-        const val SIMILARITY_SCORE = 0.2
+        const val SIMILARITY_SCORE = 0.15
+        const val SUBLIST_MAX_BLOCKS = 3
     }
 
     private var latestProcessedHistogram = hashMapOf<CharSequence, Int>()
@@ -56,19 +57,17 @@ class TextReaderAnalyzer @Inject constructor(
         val mutableBlocks = visionText.textBlocks.toMutableList()
 
         if (mutableBlocks.isNotEmpty()) {
-            mutableBlocks.sortByDescending {
-                it.text.length
-            }
-
-            val biggestBlock = mutableBlocks[0]
+            val biggestBlocks = findBiggestBlocks(mutableBlocks)
             val blockHistogram = hashMapOf<CharSequence, Int>()
-            biggestBlock.lines.forEach { line ->
-                line.elements.forEach {
-                    val word = it.text
-                    if (!blockHistogram.containsKey(word)) {
-                        blockHistogram[word] = 1
-                    } else {
-                        blockHistogram[word] = blockHistogram[word]?.plus(1) as Int
+            biggestBlocks.forEach { block ->
+                block.lines.forEach { line ->
+                    line.elements.forEach {
+                            val word = it.text
+                            if (!blockHistogram.containsKey(word)) {
+                                blockHistogram[word] = 1
+                            } else {
+                                blockHistogram[word] = blockHistogram[word]?.plus(1) as Int
+                            }
                     }
                 }
             }
@@ -78,9 +77,38 @@ class TextReaderAnalyzer @Inject constructor(
 
             if (similarity < SIMILARITY_SCORE) {
                 latestProcessedHistogram = blockHistogram
-                textFoundListener(biggestBlock.text)
+                val textBuilder = StringBuilder()
+                biggestBlocks.forEach {
+                    textBuilder.append(it.text)
+                    textBuilder.append(" ")
+                }
+                textFoundListener(textBuilder.trim().toString())
+                Log.d(TAG, "output: $textBuilder")
             }
         }
+    }
+
+    private fun findBiggestBlocks(inputList: List<Text.TextBlock>): List<Text.TextBlock> {
+        inputList.sortedByDescending {
+            it.text.length
+        }
+
+        val sublistSize =
+            if (inputList.size >= SUBLIST_MAX_BLOCKS) SUBLIST_MAX_BLOCKS else inputList.size
+        val sortedSublist = inputList.subList(0, sublistSize)
+
+        val indices = ArrayList<Int>()
+        val biggestBlocks = ArrayList<Text.TextBlock>()
+        sortedSublist.forEach {
+            indices.add(inputList.indexOf(it))
+        }
+        indices.sort()
+
+        indices.forEach {
+            biggestBlocks.add(inputList[it])
+        }
+
+        return biggestBlocks
     }
 
 }
